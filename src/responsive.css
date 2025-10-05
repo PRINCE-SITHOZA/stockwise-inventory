@@ -1,0 +1,142 @@
+/* SA Warehouse - Enhanced Mobile Responsive Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Mobile First - Under 768px */
+@media (max-width: 767px) {
+  body {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Header mobile optimization */
+  header {
+    padding: 1rem 0.5rem !important;
+    text-align: center !important;
+  }
+
+  header h1 {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Force single column for metrics */
+  .App > main > div:first-child,
+  main > div:first-child,
+  [style*="grid"]:first-child {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+    margin: 0.5rem !important;
+  }
+
+  /* Mobile cards */
+  .card,
+  div[style*="background: linear-gradient"],
+  div[style*="background-color: #1e293b"] {
+    margin: 0.25rem !important;
+    padding: 1rem !important;
+    border-radius: 0.5rem !important;
+    width: calc(100% - 0.5rem) !important;
+  }
+
+  /* Mobile buttons - touch friendly */
+  button,
+  .btn-primary,
+  [type="button"] {
+    padding: 1rem !important;
+    font-size: 16px !important;
+    min-height: 44px !important;
+    margin: 0.5rem 0 !important;
+    width: 100% !important;
+    border-radius: 0.5rem !important;
+    cursor: pointer !important;
+  }
+
+  /* Button grid on mobile */
+  .App > main > div:last-child,
+  main > div:last-child,
+  [style*="grid"]:last-child {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+    margin: 0.5rem !important;
+  }
+
+  /* Text sizing for mobile */
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.25rem !important; }
+  h3 { font-size: 1.1rem !important; }
+  p { font-size: 1rem !important; }
+
+  /* Container padding */
+  .container,
+  main[style*="max-width"],
+  main {
+    padding: 0.5rem !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Tablet - 768px to 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .App > main > div:first-child,
+  main > div:first-child,
+  [style*="grid"]:first-child {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  .App > main > div:last-child,
+  main > div:last-child,
+  [style*="grid"]:last-child {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  .card {
+    padding: 1.25rem !important;
+  }
+}
+
+/* Desktop - Above 1024px */
+@media (min-width: 1025px) {
+  .App > main > div:first-child,
+  main > div:first-child,
+  [style*="grid"]:first-child {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+
+  .App > main > div:last-child,
+  main > div:last-child,
+  [style*="grid"]:last-child {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1rem !important;
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+  button:hover {
+    transform: none !important;
+  }
+  
+  button:active {
+    opacity: 0.8 !important;
+    transform: scale(0.98) !important;
+  }
+}
+
+/* Loading animation */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.1rem;
+  text-align: center;
+}

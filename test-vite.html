@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SA Warehouse - Vite Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a; 
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>SA Warehouse</h1>
+        <p>Vite Development Server Test</p>
+        <div id="status" style="margin: 2rem 0; padding: 1rem; background: #1e293b; border-radius: 0.5rem;">
+            Testing Vite setup...
+        </div>
+        <button onclick="testReact()" style="background: #3b82f6; color: white; border: none; padding: 1rem 2rem; border-radius: 0.5rem; cursor: pointer;">
+            Test React
+        </button>
+    </div>
+
+    <script type="module">
+        function testReact() {
+            try {
+                // Test if React is available
+                if (window.React) {
+                    document.getElementById('status').innerHTML = '<div class="success">? React is working!</div>';
+                } else {
+                    // Try to import React
+                    import('https://esm.sh/react@18')
+                        .then(() => {
+                            document.getElementById('status').innerHTML = '<div class="success">? React modules loading!</div>';
+                        })
+                        .catch(err => {
+                            document.getElementById('status').innerHTML = '<div class="error">? React not found: ' + err.message + '</div>';
+                        });
+                }
+            } catch (err) {
+                document.getElementById('status').innerHTML = '<div class="error">? Error: ' + err.message + '</div>';
+            }
+        }
+
+        // Auto-test on load
+        setTimeout(testReact, 1000);
+    </script>
+</body>
+</html>

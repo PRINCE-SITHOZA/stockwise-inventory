@@ -1,0 +1,201 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Prince Musa",
+      "email": "prince@sa-warehouse.co.za",
+      "password": "admin123",
+      "role": "admin",
+      "department": "Management",
+      "phone": "+27 11 123 4567",
+      "createdAt": "2024-01-15"
+    },
+    {
+      "id": 2,
+      "name": "Sarah Johnson",
+      "email": "sarah@sa-warehouse.co.za",
+      "password": "manager123",
+      "role": "manager",
+      "department": "Inventory",
+      "phone": "+27 11 123 4568",
+      "createdAt": "2024-02-20"
+    },
+    {
+      "id": 3,
+      "name": "David Smith",
+      "email": "david@sa-warehouse.co.za",
+      "password": "staff123",
+      "role": "staff",
+      "department": "Sales",
+      "phone": "+27 11 123 4569",
+      "createdAt": "2024-03-10"
+    },
+    {
+      "id": 4,
+      "name": "Lisa van der Merwe",
+      "email": "lisa@sa-warehouse.co.za",
+      "password": "manager123",
+      "role": "manager",
+      "department": "Procurement",
+      "phone": "+27 11 123 4570",
+      "createdAt": "2024-01-25"
+    },
+    {
+      "id": 5,
+      "name": "James Brown",
+      "email": "james@sa-warehouse.co.za",
+      "password": "staff123",
+      "role": "staff",
+      "department": "Warehouse",
+      "phone": "+27 11 123 4571",
+      "createdAt": "2024-04-05"
+    },
+    {
+      "id": 6,
+      "name": "Nomsa Dlamini",
+      "email": "nomsa@sa-warehouse.co.za",
+      "password": "staff123",
+      "role": "staff",
+      "department": "Customer Service",
+      "phone": "+27 11 123 4572",
+      "createdAt": "2024-03-18"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Samsung Galaxy S24",
+      "category": "Electronics",
+      "price": 15999.99,
+      "stock": 45,
+      "minStock": 10,
+      "supplier": "Samsung SA",
+      "sku": "ELEC-SAMS-S24-001",
+      "lastRestocked": "2024-10-01"
+    },
+    {
+      "id": 2,
+      "name": "iPhone 15 Pro",
+      "category": "Electronics",
+      "price": 22999.99,
+      "stock": 28,
+      "minStock": 8,
+      "supplier": "Apple South Africa",
+      "sku": "ELEC-APPL-15P-002",
+      "lastRestocked": "2024-09-28"
+    },
+    {
+      "id": 3,
+      "name": "Office Chair Executive",
+      "category": "Furniture",
+      "price": 3499.99,
+      "stock": 12,
+      "minStock": 5,
+      "supplier": "Furniture City",
+      "sku": "FURN-OFFC-CHAIR-003",
+      "lastRestocked": "2024-09-25"
+    },
+    {
+      "id": 4,
+      "name": "Desk Lamp LED",
+      "category": "Home & Office",
+      "price": 499.99,
+      "stock": 67,
+      "minStock": 15,
+      "supplier": "Lighting Solutions SA",
+      "sku": "HOME-LAMP-LED-004",
+      "lastRestocked": "2024-10-02"
+    },
+    {
+      "id": 5,
+      "name": "Coffee Maker Deluxe",
+      "category": "Appliances",
+      "price": 1899.99,
+      "stock": 23,
+      "minStock": 6,
+      "supplier": "KitchenPro SA",
+      "sku": "APPL-COFF-MKR-005",
+      "lastRestocked": "2024-09-30"
+    },
+    {
+      "id": 6,
+      "name": "Wireless Mouse",
+      "category": "Electronics",
+      "price": 299.99,
+      "stock": 89,
+      "minStock": 20,
+      "supplier": "TechGadgets SA",
+      "sku": "ELEC-MOUS-WRL-006",
+      "lastRestocked": "2024-10-03"
+    }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "productId": 1,
+      "quantity": 45,
+      "location": "A1-02",
+      "status": "In Stock",
+      "lastUpdated": "2024-10-03T08:30:00Z"
+    },
+    {
+      "id": 2,
+      "productId": 2,
+      "quantity": 28,
+      "location": "A1-03",
+      "status": "In Stock",
+      "lastUpdated": "2024-10-03T08:30:00Z"
+    },
+    {
+      "id": 3,
+      "productId": 3,
+      "quantity": 12,
+      "location": "B2-01",
+      "status": "Low Stock",
+      "lastUpdated": "2024-10-03T08:30:00Z"
+    }
+  ],
+  "sales": [
+    {
+      "id": 1,
+      "productId": 1,
+      "quantity": 2,
+      "amount": 31999.98,
+      "customer": "Tech Solutions SA",
+      "date": "2024-10-02",
+      "salesperson": "David Smith"
+    },
+    {
+      "id": 2,
+      "productId": 4,
+      "quantity": 5,
+      "amount": 2499.95,
+      "customer": "Office World",
+      "date": "2024-10-02",
+      "salesperson": "Sarah Johnson"
+    }
+  ],
+  "activityLog": [
+    {
+      "id": 1,
+      "user": "Prince Musa",
+      "action": "User logged in",
+      "timestamp": "2024-10-03T08:29:46Z",
+      "details": "Admin login successful"
+    },
+    {
+      "id": 2,
+      "user": "Sarah Johnson",
+      "action": "Inventory updated",
+      "timestamp": "2024-10-03T08:15:23Z",
+      "details": "Updated stock for Samsung Galaxy S24"
+    },
+    {
+      "id": 3,
+      "user": "David Smith",
+      "action": "Sale completed",
+      "timestamp": "2024-10-02T14:30:15Z",
+      "details": "Sold 2x Samsung Galaxy S24 to Tech Solutions SA"
+    }
+  ]
+}
