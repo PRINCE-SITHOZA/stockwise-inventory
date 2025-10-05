@@ -20,3 +20,6 @@ npm-debug.log*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Temporary folders
+temp-app/
