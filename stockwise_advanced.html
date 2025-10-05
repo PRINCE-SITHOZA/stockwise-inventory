@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOCKWISE - Inventory Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Fixed scrolling for dashboard */
+        .dashboard-container {
+            overflow-y: auto;
+            max-height: 95vh;
+        }
+
+        /* Solid Bright STOCKWISE Background */
+        .background-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .stockwise-text {
+            font-size: 180px;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.15);
+            text-transform: uppercase;
+            letter-spacing: 15px;
+            transform: rotate(-5deg);
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        /* Glass Effect Login Container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            margin: 0 auto;
+        }
+
+        .login-container h1 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 2.8em;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .login-container p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 35px;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            font-size: 1.1em;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #96c93d, #00b09b);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .demo-accounts {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .demo-accounts h4 {
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .account-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .account-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .account-name {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        .account-role {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8em;
+            margin-bottom: 4px;
+        }
+
+        .account-creds {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75em;
+            font-family: monospace;
+        }
+
+        /* Role Badges */
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .role-admin { background: #e74c3c; color: white; }
+        .role-manager { background: #f39c12; color: white; }
+        .role-staff { background: #3498db; color: white; }
+        .role-company { background: #9b59b6; color: white; }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: none;
+            width: 100%;
+            max-width: 1600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px 35px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .user-role {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .content {
+            padding: 35px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 35px;
+            min-height: 600px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            height: fit-content;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 140px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        .chart-canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #667eea;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+
+        /* Products Table */
+        .products-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-header h3 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 18px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .products-table th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95em;
+            position: sticky;
+            top: 0;
+        }
+
+        .products-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .low-stock {
+            color: #e74c3c;
+            font-weight: bold;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .in-stock {
+            color: #27ae60;
+            font-weight: bold;
+            background: rgba(39, 174, 96, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .action-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Search and Filter */
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            padding: 18px 28px;
+            background: #27ae60;
+            color: white;
+            border-radius: 10px;
+            display: none;
+            z-index: 1001;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            font-weight: 600;
+        }
+
+        .error {
+            background: #e74c3c;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 550px;
+            width: 90%;
+            margin: 50px auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 1.8em;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #34495e;
+        }
+
+        .modal h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Role-based restrictions */
+        .restricted {
+            opacity: 0.5;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .restricted::after {
+            content: "Access Restricted";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: 600;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <!-- Solid Bright STOCKWISE Background -->
+    <div class="background-text">
+        <div class="stockwise-text">STOCKWISE</div>
+    </div>
+
+    <!-- Glass Effect Login Container -->
+    <div class="login-container" id="loginContainer">
+        <h1>STOCKWISE</h1>
+        <p>Advanced Inventory Management System</p>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">ACCESS SYSTEM</button>
+        </form>
+
+        <div class="demo-accounts">
+            <h4>South African Demo Accounts</h4>
+            <div class="account-grid">
+                <div class="account-card" onclick="fillCredentials('prince', 'Prince@2024')">
+                    <div class="account-name">?? Prince</div>
+                    <div class="account-role"><span class="role-badge role-admin">Admin</span></div>
+                    <div class="account-creds">user: prince | pass: Prince@2024</div>
+                </div>
+                <div class="account-card" onclick="fillCredentials('katlego', 'Katlego#123')">
+                    <div class="account-name">?? Katlego</div>
+                    <div class="account-role"><span class="role-badge role-manager">Manager</span></div>
+                    <div class="account-creds">user: katlego | pass: Katlego#123</div>
+                </div>
+                <div class="account-card" onclick="fillCredentials('mugnum', 'Mugnum$456')">
+                    <div class="account-name">????? Mugnum</div>
+                    <div class="account-role"><span class="role-badge role-staff">Staff</span></div>
+                    <div class="account-creds">user: mugnum | pass: Mugnum$456</div>
+                </div>
+                <div class="account-card" onclick="fillCredentials('tshireletso', 'Tshire!789')">
+                    <div class="account-name">????? Tshireletso</div>
+                    <div class="account-role"><span class="role-badge role-staff">Staff</span></div>
+                    <div class="account-creds">user: tshireletso | pass: Tshire!789</div>
+                </div>
+                <div class="account-card" onclick="fillCredentials('mtnwarehouse', 'MTN@Ware2024')">
+                    <div class="account-name">?? MTN Warehouse SA</div>
+                    <div class="account-role"><span class="role-badge role-company">Company</span></div>
+                    <div class="account-creds">user: mtnwarehouse | pass: MTN@Ware2024</div>
+                </div>
+                <div class="account-card" onclick="fillCredentials('shopritejhb', 'ShopRite#JHB')">
+                    <div class="account-name">?? Shoprite Johannesburg</div>
+                    <div class="account-role"><span class="role-badge role-company">Company</span></div>
+                    <div class="account-creds">user: shopritejhb | pass: ShopRite#JHB</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard-container" id="dashboardContainer">
+        <div class="header">
+            <div class="header-content">
+                <div>
+                    <h1>STOCKWISE DASHBOARD</h1>
+                    <p>Comprehensive Inventory Analytics & Management</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-details">
+                        <div class="user-name" id="userDisplayName">Loading...</div>
+                        <div class="user-role" id="userRoleDisplay">Role: Loading...</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="main-content">
+                <!-- Statistics -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalValue">R 0.00</div>
+                        <div class="stat-label">Total Inventory Value</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="lowStock">0</div>
+                        <div class="stat-label">Low Stock Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCategories">0</div>
+                        <div class="stat-label">Product Categories</div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <div class="chart-title">Inventory Value by Category (ZAR)</div>
+                        <canvas id="categoryChart" class="chart-canvas"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Stock Distribution</div>
+                        <canvas id="stockChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="features-grid">
+                    <div class="feature-card" onclick="viewAllProducts()">
+                        <div class="feature-icon">Inventory View</div>
+                        <h3>View All Products</h3>
+                        <p>Browse complete inventory with advanced search, filtering and sorting capabilities</p>
+                    </div>
+
+                    <div class="feature-card" onclick="showAddModal()">
+                        <div class="feature-icon">Add Product</div>
+                        <h3>Add New Product</h3>
+                        <p>Add new items to inventory with comprehensive product details and specifications</p>
+                    </div>
+
+                    <div class="feature-card" onclick="editProducts()">
+                        <div class="feature-icon">Edit Products</div>
+                        <h3>Edit Products</h3>
+                        <p>Modify product information, pricing, stock levels and supplier details</p>
+                    </div>
+
+                    <div class="feature-card" onclick="generateReports()">
+                        <div class="feature-icon">Analytics</div>
+                        <h3>Generate Reports</h3>
+                        <p>Create detailed inventory, sales, and performance analytics reports</p>
+                    </div>
+
+                    <div class="feature-card" onclick="exportData()">
+                        <div class="feature-icon">Data Export</div>
+                        <h3>Export Data</h3>
+                        <p>Export inventory data to CSV, Excel, PDF formats for external analysis</p>
+                    </div>
+
+                    <div class="feature-card" onclick="manageSuppliers()">
+                        <div class="feature-icon">Suppliers</div>
+                        <h3>Supplier Management</h3>
+                        <p>Manage supplier relationships, performance metrics and contact information</p>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="products-section">
+                    <div class="section-header">
+                        <h3>Current Inventory Overview</h3>
+                        <div class="search-filter">
+                            <input type="text" id="searchBox" class="search-box" placeholder="Search products..." onkeyup="filterProducts()">
+                            <select id="categoryFilter" class="filter-select" onchange="filterProducts()">
+                                <option value="">All Categories</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Food">Food & Beverages</option>
+                                <option value="Automotive">Automotive</option>
+                                <option value="Office">Office Supplies</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Industrial">Industrial</option>
+                            </select>
+                            <select id="stockFilter" class="filter-select" onchange="filterProducts()">
+                                <option value="">All Stock Levels</option>
+                                <option value="low">Low Stock (<10)</option>
+                                <option value="normal">Normal Stock</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>SKU Code</th>
+                                    <th>Category</th>
+                                    <th>Price (ZAR)</th>
+                                    <th>Quantity</th>
+                                    <th>Supplier</th>
+                                    <th>Stock Value</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <!-- Products loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <h3>Quick Actions</h3>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="showAddModal()">Add New Product</button>
+                    <button class="action-btn" onclick="viewAllProducts()">View Inventory</button>
+                    <button class="action-btn" onclick="checkLowStock()">Low Stock Alert</button>
+                    <button class="action-btn" onclick="generateStockReport()">Stock Report</button>
+                    <button class="action-btn" onclick="exportData()">Export Data</button>
+                    <button class="action-btn" onclick="refreshAllData()">Refresh Data</button>
+                </div>
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e9ecef;">
+                    <h3>System Information</h3>
+                    <p style="margin: 10px 0; color: #6c757d;"><strong>Location:</strong> Johannesburg Warehouse</p>
+                    <p style="margin: 10px 0; color: #6c757d;"><strong>Currency:</strong> South African Rand (ZAR)</p>
+                    <p style="margin: 10px 0; color: #6c757d;"><strong>Last Updated:</strong> <span id="lastUpdated">Just now</span></p>
+                    <p style="margin: 10px 0; color: #6c757d;"><strong>Data Points:</strong> <span id="dataPoints">0</span> records</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Add New Product</h2>
+            <form id="addProductForm" onsubmit="addProduct(event)">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productSKU">SKU Code</label>
+                    <input type="text" id="productSKU" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing & Apparel</option>
+                        <option value="Food">Food & Beverages</option>
+                        <option value="Office">Office Supplies</option>
+                        <option value="Home">Home & Garden</option>
+                        <option value="Sports">Sports & Outdoor</option>
+                        <option value="Automotive">Automotive</option>
+                        <option value="Health">Health & Beauty</option>
+                        <option value="Industrial">Industrial</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productSupplier">Supplier</label>
+                    <select id="productSupplier" required>
+                        <option value="">Select Supplier</option>
+                        <option value="MTN Group">MTN Group</option>
+                        <option value="Shoprite Holdings">Shoprite Holdings</option>
+                        <option value="Pick n Pay">Pick n Pay</option>
+                        <option value="Sasol Limited">Sasol Limited</option>
+                        <option value="Woolworths SA">Woolworths SA</option>
+                        <option value="Imperial Logistics">Imperial Logistics</option>
+                        <option value="Bidvest Group">Bidvest Group</option>
+                        <option value="AutoZone SA">AutoZone SA</option>
+                        <option value="Sports Co">Sports Co</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price (ZAR)</label>
+                    <input type="number" id="productPrice" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productQuantity">Quantity</label>
+                    <input type="number" id="productQuantity" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="3" placeholder="Enter product description..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Add Product to Inventory</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // User accounts with different roles and permissions - SIMPLIFIED NAMES
+        const users = {
+            'prince': { 
+                password: 'Prince@2024', 
+                name: 'Prince', 
+                role: 'admin',
+                permissions: ['view', 'add', 'edit', 'delete', 'reports', 'export', 'suppliers']
+            },
+            'katlego': { 
+                password: 'Katlego#123', 
+                name: 'Katlego', 
+                role: 'manager',
+                permissions: ['view', 'add', 'edit', 'reports', 'export']
+            },
+            'mugnum': { 
+                password: 'Mugnum$456', 
+                name: 'Mugnum', 
+                role: 'staff',
+                permissions: ['view', 'add']
+            },
+            'tshireletso': { 
+                password: 'Tshire!789', 
+                name: 'Tshireletso', 
+                role: 'staff',
+                permissions: ['view', 'add']
+            },
+            'mtnwarehouse': { 
+                password: 'MTN@Ware2024', 
+                name: 'MTN Warehouse SA', 
+                role: 'company',
+                permissions: ['view', 'reports']
+            },
+            'shopritejhb': { 
+                password: 'ShopRite#JHB', 
+                name: 'Shoprite Johannesburg', 
+                role: 'company',
+                permissions: ['view', 'reports']
+            }
+        };
+
+        // Comprehensive South African product data
+        let products = JSON.parse(localStorage.getItem('stockwiseProducts')) || [
+            { id: 1, name: 'Samsung Galaxy S23', sku: 'ELEC-S23-001', category: 'Electronics', supplier: 'MTN Group', price: 18999.99, quantity: 25, description: 'Latest Samsung smartphone with 5G' },
+            { id: 2, name: 'MTN 4G Router', sku: 'ELEC-MTN-RT', category: 'Electronics', supplier: 'MTN Group', price: 899.99, quantity: 45, description: '4G LTE Mobile WiFi Router' },
+            { id: 3, name: 'Woolworths Food Hamper', sku: 'FOOD-WH-PRM', category: 'Food', supplier: 'Woolworths SA', price: 1499.99, quantity: 18, description: 'Premium food basket with local delicacies' },
+            { id: 4, name: 'Pick n Pay Grocery Pack', sku: 'FOOD-PNP-BSC', category: 'Food', supplier: 'Pick n Pay', price: 799.99, quantity: 67, description: 'Essential groceries package for family' },
+            { id: 5, name: 'Sasol Engine Oil 5L', sku: 'AUTO-SAS-OIL', category: 'Automotive', supplier: 'Sasol Limited', price: 289.50, quantity: 8, description: 'Premium synthetic engine oil 5L' },
+            { id: 6, name: 'Mining Safety Helmet', sku: 'IND-MIN-HLM', category: 'Industrial', supplier: 'Imperial Logistics', price: 345.00, quantity: 12, description: 'Industrial safety helmet with LED' },
+            { id: 7, name: 'Office Desk Chair', sku: 'OFF-CHR-ERG', category: 'Office', supplier: 'Bidvest Group', price: 1299.99, quantity: 15, description: 'Ergonomic office chair with lumbar support' },
+            { id: 8, name: 'Bafana Bafana Jersey', sku: 'CLTH-BAF-JRS', category: 'Clothing', supplier: 'Sports Co', price: 599.99, quantity: 32, description: 'Official South African national team jersey' },
+            { id: 9, name: 'Rooibos Tea Pack', sku: 'FOOD-RTB-100', category: 'Food', supplier: 'Woolworths SA', price: 89.99, quantity: 120, description: 'Premium South African Rooibos tea' },
+            { id: 10, name: 'Car Battery 12V', sku: 'AUTO-BAT-65A', category: 'Automotive', supplier: 'AutoZone SA', price: 1249.99, quantity: 6, description: '65Ah 12V car battery with warranty' },
+            { id: 11, name: 'Laptop Dell XPS 15', sku: 'ELEC-DEL-XPS', category: 'Electronics', supplier: 'MTN Group', price: 32999.99, quantity: 8, description: 'High-performance business laptop' },
+            { id: 12, name: 'Biltong 1kg Pack', sku: 'FOOD-BLT-PRM', category: 'Food', supplier: 'Pick n Pay', price: 349.99, quantity: 23, description: 'Premium South African biltong' }
+        ];
+
+        let currentUser = null;
+        let categoryChart = null;
+        let stockChart = null;
+        let filteredProducts = [...products];
+
+        // Check login status
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        });
+
+        // Fill credentials function
+        function fillCredentials(username, password) {
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+        }
+
+        // Login handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (users[username] && users[username].password === password) {
+                currentUser = { 
+                    username: username, 
+                    name: users[username].name, 
+                    role: users[username].role,
+                    permissions: users[username].permissions
+                };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showDashboard();
+                showNotification('Welcome ' + currentUser.name + ' to STOCKWISE Management System');
+            } else {
+                showNotification('Invalid credentials. Please check your username and password.', true);
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            updateUserDisplay();
+            loadProducts();
+            updateLastUpdated();
+            initializeCharts();
+            applyRoleBasedPermissions();
+        }
+
+        function updateUserDisplay() {
+            document.getElementById('userDisplayName').textContent = currentUser.name;
+            document.getElementById('userRoleDisplay').textContent = 'Role: ' + currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+        }
+
+        function applyRoleBasedPermissions() {
+            const role = currentUser.role;
+            const permissions = currentUser.permissions;
+
+            // Apply restrictions based on role
+            if (!permissions.includes('add')) {
+                document.querySelector('.feature-card:nth-child(2)').classList.add('restricted');
+            }
+            if (!permissions.includes('edit')) {
+                document.querySelector('.feature-card:nth-child(3)').classList.add('restricted');
+            }
+            if (!permissions.includes('reports')) {
+                document.querySelector('.feature-card:nth-child(4)').classList.add('restricted');
+            }
+            if (!permissions.includes('export')) {
+                document.querySelector('.feature-card:nth-child(5)').classList.add('restricted');
+            }
+            if (!permissions.includes('suppliers')) {
+                document.querySelector('.feature-card:nth-child(6)').classList.add('restricted');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('dashboardContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('loginForm').reset();
+            showNotification('Logged out successfully');
+        }
+
+        // Initialize Charts
+        function initializeCharts() {
+            // Destroy existing charts if they exist
+            if (categoryChart) categoryChart.destroy();
+            if (stockChart) stockChart.destroy();
+
+            // Category Value Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            const categoryData = getCategoryValueData();
+            
+            categoryChart = new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: categoryData.labels,
+                    datasets: [{
+                        label: 'Inventory Value (ZAR)',
+                        data: categoryData.values,
+                        backgroundColor: [
+                            '#667eea', '#764ba2', '#f093fb', '#f5576c',
+                            '#4facfe', '#00f2fe', '#43e97b', '#38f9d7'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `R ${context.raw.toLocaleString()}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R ' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Stock Distribution Pie Chart
+            const stockCtx = document.getElementById('stockChart').getContext('2d');
+            const stockData = getStockDistributionData();
+            
+            stockChart = new Chart(stockCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: stockData.labels,
+                    datasets: [{
+                        data: stockData.values,
+                        backgroundColor: [
+                            '#e74c3c', '#f39c12', '#2ecc71', '#3498db',
+                            '#9b59b6', '#1abc9c', '#34495e', '#95a5a6'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function getCategoryValueData() {
+            const categories = {};
+            products.forEach(product => {
+                const value = product.price * product.quantity;
+                if (categories[product.category]) {
+                    categories[product.category] += value;
+                } else {
+                    categories[product.category] = value;
+                }
+            });
+
+            return {
+                labels: Object.keys(categories),
+                values: Object.values(categories)
+            };
+        }
+
+        function getStockDistributionData() {
+            const totalProducts = products.length;
+            const lowStock = products.filter(p => p.quantity < 10).length;
+            const mediumStock = products.filter(p => p.quantity >= 10 && p.quantity <= 50).length;
+            const highStock = products.filter(p => p.quantity > 50).length;
+            const outOfStock = products.filter(p => p.quantity === 0).length;
+
+            return {
+                labels: ['Low Stock (<10)', 'Medium Stock (10-50)', 'High Stock (>50)', 'Out of Stock'],
+                values: [lowStock, mediumStock, highStock, outOfStock]
+            };
+        }
+
+        // PRODUCT MANAGEMENT FUNCTIONS
+        function loadProducts() {
+            filteredProducts = [...products];
+            updateStatistics();
+            renderProductsTable();
+        }
+
+        function updateStatistics() {
+            document.getElementById('totalProducts').textContent = products.length;
+            
+            const totalValue = products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+            document.getElementById('totalValue').textContent = 'R ' + totalValue.toLocaleString('en-ZA', {minimumFractionDigits: 2});
+            
+            const lowStockCount = products.filter(p => p.quantity < 10).length;
+            document.getElementById('lowStock').textContent = lowStockCount;
+
+            const categories = [...new Set(products.map(p => p.category))];
+            document.getElementById('totalCategories').textContent = categories.length;
+
+            document.getElementById('dataPoints').textContent = products.length;
+        }
+
+        function renderProductsTable() {
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = '';
+            
+            filteredProducts.forEach(product => {
+                const status = product.quantity < 10 ? 'Low Stock' : 'In Stock';
+                const statusClass = product.quantity < 10 ? 'low-stock' : 'in-stock';
+                const stockValue = product.price * product.quantity;
+                const row = `<tr>
+                    <td><strong>${product.name}</strong></td>
+                    <td>${product.sku}</td>
+                    <td>${product.category}</td>
+                    <td><strong>R ${product.price.toLocaleString('en-ZA', {minimumFractionDigits: 2})}</strong></td>
+                    <td>${product.quantity}</td>
+                    <td>${product.supplier}</td>
+                    <td><strong>R ${stockValue.toLocaleString('en-ZA', {minimumFractionDigits: 2})}</strong></td>
+                    <td><span class="${statusClass}">${status}</span></td>
+                    <td class="action-cell">
+                        <button class="btn-small btn-edit" onclick="editProduct(${product.id})">Edit</button>
+                        <button class="btn-small btn-delete" onclick="deleteProduct(${product.id})">Delete</button>
+                    </td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const stockFilter = document.getElementById('stockFilter').value;
+
+            filteredProducts = products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                    product.sku.toLowerCase().includes(searchTerm) ||
+                                    product.supplier.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || product.category === categoryFilter;
+                const matchesStock = !stockFilter || 
+                    (stockFilter === 'low' && product.quantity < 10) ||
+                    (stockFilter === 'normal' && product.quantity >= 10);
+
+                return matchesSearch && matchesCategory && matchesStock;
+            });
+
+            renderProductsTable();
+        }
+
+        function updateLastUpdated() {
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent = now.toLocaleString('en-ZA');
+        }
+
+        // FEATURE FUNCTIONS
+        function viewAllProducts() {
+            // Reset filters
+            document.getElementById('searchBox').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('stockFilter').value = '';
+            filteredProducts = [...products];
+            renderProductsTable();
+            showNotification(`Displaying all ${products.length} products`);
+            document.querySelector('.products-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showAddModal() {
+            if (!currentUser.permissions.includes('add')) {
+                showNotification('Access denied: You do not have permission to add products', true);
+                return;
+            }
+            document.getElementById('addProductModal').style.display = 'block';
+        }
+
+        function editProducts() {
+            if (!currentUser.permissions.includes('edit')) {
+                showNotification('Access denied: You do not have permission to edit products', true);
+                return;
+            }
+            showNotification('Click the Edit button next to any product to modify it');
+        }
+
+        function editProduct(productId) {
+            if (!currentUser.permissions.includes('edit')) {
+                showNotification('Access denied: You do not have permission to edit products', true);
+                return;
+            }
+            // Edit functionality would go here
+            showNotification('Edit product functionality would open here for product ID: ' + productId);
+        }
+
+        function deleteProduct(productId) {
+            if (!currentUser.permissions.includes('delete')) {
+                showNotification('Access denied: You do not have permission to delete products', true);
+                return;
+            }
+            if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                products = products.filter(p => p.id !== productId);
+                localStorage.setItem('stockwiseProducts', JSON.stringify(products));
+                loadProducts();
+                initializeCharts();
+                showNotification('Product deleted successfully');
+            }
+        }
+
+        function generateReports() {
+            if (!currentUser.permissions.includes('reports')) {
+                showNotification('Access denied: You do not have permission to generate reports', true);
+                return;
+            }
+            const totalValue = products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+            const avgPrice = totalValue / products.reduce((sum, p) => sum + p.quantity, 0);
+            const lowStockCount = products.filter(p => p.quantity < 10).length;
+            
+            showNotification(`?? Report Generated: ${products.length} products, Total Value: R ${totalValue.toLocaleString('en-ZA', {minimumFractionDigits: 2})}, ${lowStockCount} low stock items`);
+        }
+
+        function exportData() {
+            if (!currentUser.permissions.includes('export')) {
+                showNotification('Access denied: You do not have permission to export data', true);
+                return;
+            }
+            const headers = ['Name', 'SKU', 'Category', 'Supplier', 'Price (ZAR)', 'Quantity', 'Stock Value (ZAR)', 'Status'];
+            const csvData = products.map(product => [
+                `"${product.name}"`,
+                product.sku,
+                product.category,
+                product.supplier,
+                product.price,
+                product.quantity,
+                (product.price * product.quantity).toFixed(2),
+                product.quantity < 10 ? 'Low Stock' : 'In Stock'
+            ]);
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += headers.join(',') + '\n';
+            csvData.forEach(row => {
+                csvContent += row.join(',') + '\n';
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "stockwise_inventory_export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Inventory data exported to CSV successfully');
+        }
+
+        function manageSuppliers() {
+            if (!currentUser.permissions.includes('suppliers')) {
+                showNotification('Access denied: You do not have permission to manage suppliers', true);
+                return;
+            }
+            const suppliers = [...new Set(products.map(p => p.supplier))];
+            showNotification(`Managing ${suppliers.length} suppliers: ${suppliers.join(', ')}`);
+        }
+
+        // QUICK ACTIONS
+        function checkLowStock() {
+            const lowStockItems = products.filter(p => p.quantity < 10);
+            if (lowStockItems.length > 0) {
+                const itemNames = lowStockItems.map(p => p.name).join(', ');
+                showNotification(`?? Low Stock Alert: ${lowStockItems.length} items need attention: ${itemNames}`);
+            } else {
+                showNotification('? All items are sufficiently stocked');
+            }
+        }
+
+        function generateStockReport() {
+            const totalValue = products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+            const lowStockCount = products.filter(p => p.quantity < 10).length;
+            
+            showNotification(`?? Stock Report: ${products.length} items, Total Value: R ${totalValue.toLocaleString('en-ZA', {minimumFractionDigits: 2})}, ${lowStockCount} low stock items`);
+        }
+
+        function refreshAllData() {
+            loadProducts();
+            initializeCharts();
+            updateLastUpdated();
+            showNotification('All data refreshed successfully');
+        }
+
+        // ADD PRODUCT FUNCTIONALITY
+        function addProduct(event) {
+            event.preventDefault();
+            
+            if (!currentUser.permissions.includes('add')) {
+                showNotification('Access denied: You do not have permission to add products', true);
+                return;
+            }
+            
+            const newProduct = {
+                id: Date.now(),
+                name: document.getElementById('productName').value,
+                sku: document.getElementById('productSKU').value,
+                category: document.getElementById('productCategory').value,
+                supplier: document.getElementById('productSupplier').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                quantity: parseInt(document.getElementById('productQuantity').value),
+                description: document.getElementById('productDescription').value
+            };
+
+            products.push(newProduct);
+            localStorage.setItem('stockwiseProducts', JSON.stringify(products));
+            
+            closeModal();
+            loadProducts();
+            initializeCharts();
+            document.getElementById('addProductForm').reset();
+            
+            showNotification('Product added successfully to inventory');
+        }
+
+        function closeModal() {
+            document.getElementById('addProductModal').style.display = 'none';
+        }
+
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            if (isError) {
+                notification.classList.add('error');
+            } else {
+                notification.classList.remove('error');
+            }
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
