@@ -1,25 +1,22 @@
-# Dependencies
+﻿# Dependencies
 node_modules/
-npm-debug.log*
-
-# Environment variables
+    
+# Environment
 .env
 .env.local
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS generated files
+    
+# Build
+dist/
+build/
+    
+# Logs
+*.log
+    
+# OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
-
-# Temporary folders
-temp-app/
+    
+# Our test scripts
+FormTester.ps1
+SimpleFormTest.ps1
+Test-Form.ps1
