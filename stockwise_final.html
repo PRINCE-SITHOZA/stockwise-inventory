@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOCKWISE - Inventory Management</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); max-width: 400px; width: 90%; text-align: center; }
+        .btn { width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; margin: 10px 0; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>STOCKWISE</h1>
+        <p>South African Inventory Management</p>
+        <form onsubmit="login(event)">
+            <input type="text" placeholder="Username" required style="width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px;">
+            <input type="password" placeholder="Password" required style="width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px;">
+            <button type="submit" class="btn">LOGIN</button>
+        </form>
+        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+            <h3>Demo Accounts</h3>
+            <p><strong>Prince (Admin):</strong> prince / Prince@2024</p>
+            <p><strong>Katlego (Manager):</strong> katlego / Katlego#123</p>
+        </div>
+    </div>
+
+    <script>
+        function login(e) {
+            e.preventDefault();
+            const users = {
+                'prince': { password: 'Prince@2024', name: 'Prince' },
+                'katlego': { password: 'Katlego#123', name: 'Katlego' }
+            };
+            const username = e.target[0].value;
+            const password = e.target[1].value;
+            
+            if (users[username] && users[username].password === password) {
+                alert('Login successful! Welcome ' + users[username].name);
+            } else {
+                alert('Invalid credentials! Try: prince / Prince@2024');
+            }
+        }
+    </script>
+</body>
+</html>
