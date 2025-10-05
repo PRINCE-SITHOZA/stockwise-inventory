@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOCKWISE PRO - Inventory Management</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .demo-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>?? STOCKWISE PRO</h1>
+        <p><strong>South African Inventory Management System</strong></p>
+        
+        <div class="demo-info">
+            <h3>???? Demo Login Credentials:</h3>
+            <p><strong>Admin:</strong> prince / Prince@2024</p>
+            <p><strong>Manager:</strong> katlego / Katlego#123</p>
+            <p><strong>Staff:</strong> mugnum / Mugnum$456</p>
+        </div>
+        
+        <button class="btn" onclick="login()">Login to Dashboard</button>
+        <button class="btn" onclick="viewDemo()" style="background: #28a745;">Quick Demo</button>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px;">
+            <p><strong>?? Location:</strong> Johannesburg, South Africa</p>
+            <p><strong>?? Currency:</strong> ZAR (R)</p>
+            <p><strong>?? Warehouse:</strong> Main Distribution Center</p>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            alert('STOCKWISE Login System\n\nUse demo credentials:\nAdmin: prince / Prince@2024\nManager: katlego / Katlego#123\nStaff: mugnum / Mugnum$456');
+        }
+        
+        function viewDemo() {
+            alert('STOCKWISE Features:\n? Inventory Management\n? ZAR Currency Support\n? Role-based Access\n? South African Business Focus\n? Real-time Dashboard\n? Low Stock Alerts');
+        }
+    </script>
+</body>
+</html>
