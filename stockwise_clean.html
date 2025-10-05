@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOCKWISE - Smart Inventory Management</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 50px auto;
+        }
+        
+        .dashboard {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav {
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .nav button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .nav button.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .content {
+            padding: 30px;
+            min-height: 400px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .btn-block {
+            width: 100%;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="container">
+        <div class="login-container" id="loginContainer">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: var(--primary); font-size: 2.5em;">?? STOCKWISE</h1>
+                <p style="color: var(--secondary);">Smart Inventory Management System</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-block">Login to System</button>
+            </form>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f0f9ff; border-radius: 8px;">
+                <h4>Demo Accounts:</h4>
+                <p><strong>Admin:</strong> admin / admin123</p>
+                <p><strong>Manager:</strong> manager / manager123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="container">
+        <div class="dashboard" id="dashboard">
+            <div class="header">
+                <div>
+                    <h1>?? STOCKWISE Dashboard</h1>
+                    <p>Welcome, <span id="userName">User</span></p>
+                </div>
+                <button onclick="logout()" class="btn" style="background: var(--danger);">Logout</button>
+            </div>
+            
+            <div class="nav">
+                <button onclick="showSection('dashboard')" class="active">Dashboard</button>
+                <button onclick="showSection('products')">Products</button>
+                <button onclick="showSection('inventory')">Inventory</button>
+                <button onclick="showSection('reports')">Reports</button>
+            </div>
+            
+            <div class="content">
+                <!-- Dashboard Section -->
+                <div id="section-dashboard">
+                    <div class="stats">
+                        <div class="stat-card">
+                            <h3>Total Products</h3>
+                            <p style="font-size: 2em; font-weight: bold; color: var(--primary);">24</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Value</h3>
+                            <p style="font-size: 2em; font-weight: bold; color: var(--success);">R 189,450</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Low Stock</h3>
+                            <p style="font-size: 2em; font-weight: bold; color: var(--warning);">3</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Categories</h3>
+                            <p style="font-size: 2em; font-weight: bold; color: var(--secondary);">8</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Recent Activity</h3>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                        <p>? Product "Samsung Galaxy S23" added</p>
+                        <p>?? Stock updated for "MTN Router"</p>
+                        <p>?? Low stock alert for "Safety Helmets"</p>
+                    </div>
+                </div>
+                
+                <!-- Products Section -->
+                <div id="section-products" class="hidden">
+                    <h2>Product Management</h2>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                        <h3>All Products</h3>
+                        <button class="btn">+ Add Product</button>
+                    </div>
+                    
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <h4>Samsung Galaxy S23</h4>
+                            <p>Category: Electronics</p>
+                            <p>Price: R 18,999</p>
+                            <p>Stock: 15 units</p>
+                        </div>
+                        <div class="product-card">
+                            <h4>MTN 4G Router</h4>
+                            <p>Category: Electronics</p>
+                            <p>Price: R 899</p>
+                            <p>Stock: 45 units</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Other sections can be added here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple login system
+        const users = {
+            'admin': { password: 'admin123', name: 'Administrator' },
+            'manager': { password: 'manager123', name: 'Manager' }
+        };
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (users[username] && users[username].password === password) {
+                showDashboard(users[username].name);
+            } else {
+                alert('Invalid credentials! Try: admin / admin123');
+            }
+        });
+
+        function showDashboard(userName) {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('userName').textContent = userName;
+        }
+
+        function logout() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('loginForm').reset();
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('[id^="section-"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById('section-' + sectionName).classList.remove('hidden');
+            
+            // Update active nav button
+            document.querySelectorAll('.nav button').forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
