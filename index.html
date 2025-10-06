@@ -6,77 +6,637 @@
     <title>STOCKWISE - Professional Inventory Management</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-<<<<<<< HEAD
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
-            padding: 20px;
-            background: #1a1d29;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --dark-bg: #1a1d29;
+            --dark-card: #252a3a;
+            --dark-border: #343a4a;
+            --dark-text: #e9ecef;
+            --dark-text-secondary: #adb5bd;
+            --accent-primary: #4361ee;
+            --accent-secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --danger: #e63946;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --light-border: #dee2e6;
+            --light-text: #212529;
+            --light-text-secondary: #6c757d;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            min-height: 100vh;
+            width: 100vw;
+            position: relative;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode {
+            background: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1002;
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .light-mode .dark-mode-toggle {
+            background: var(--light-card);
+            border: 1px solid var(--light-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .background-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+        }
+
+        .light-mode .background-logo {
+            opacity: 0.1;
+        }
+
+        .stockwise-text {
+            font-size: 20vw;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2vw;
+            transform: rotate(-5deg);
+            user-select: none;
+            white-space: nowrap;
+            text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+        }
+
+        .light-mode .stockwise-text {
+            color: #2c3e50;
+        }
+
+        .login-container {
+            background: var(--dark-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--dark-border);
+            padding: 5vh 4vw;
+            border-radius: 25px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .light-mode .login-container {
+            background: var(--light-card);
+            border: 1px solid var(--light-border);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h1 {
+            color: var(--dark-text);
+            margin-bottom: 2vh;
+            font-size: clamp(2em, 5vw, 2.8em);
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .light-mode .login-container h1 {
+            color: var(--light-text);
+        }
+
+        .login-container p {
+            color: var(--dark-text-secondary);
+            margin-bottom: 4vh;
+            font-size: clamp(1em, 3vw, 1.2em);
+            font-weight: 300;
+        }
+
+        .light-mode .login-container p {
+            color: var(--light-text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 3vh;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 1vh;
+            color: var(--dark-text);
+            font-weight: 600;
+            font-size: clamp(0.9em, 2.5vw, 1em);
+        }
+
+        .light-mode .form-group label {
+            color: var(--light-text);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 2vh 2vw;
+            background: var(--dark-bg);
+            border: 1px solid var(--dark-border);
+            border-radius: 15px;
+            font-size: clamp(1em, 3vw, 1.1em);
+            color: var(--dark-text);
+            transition: all 0.3s ease;
+        }
+
+        .light-mode .form-group input {
+            background: var(--light-bg);
+            border: 1px solid var(--light-border);
+            color: var(--light-text);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: var(--dark-card);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .light-mode .form-group input:focus {
+            background: var(--light-card);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 2vh;
+            border: none;
+            border-radius: 15px;
+            font-size: clamp(1em, 3vw, 1.2em);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            margin-bottom: 2vh;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .dashboard-container {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            background: var(--dark-card);
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .light-mode .dashboard-container {
+            background: var(--light-card);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 2vh 3vw;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-size: clamp(1.5em, 4vw, 2.2em);
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 2vw;
+            flex-wrap: wrap;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+        }
+
+        .user-role {
+            font-size: clamp(0.7em, 2vw, 0.85em);
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 1vh 2vw;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .content {
+            padding: 3vh 3vw;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 3vh;
+            height: calc(100vh - 120px);
+            overflow: hidden;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 3vh;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .sidebar {
+            background: var(--dark-bg);
+            padding: 2vh 2vw;
+            border-radius: 15px;
+            height: fit-content;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 2vh;
+            border: 1px solid var(--dark-border);
+            transition: all 0.3s ease;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+
+        .light-mode .sidebar {
+            background: var(--light-bg);
+            border: 1px solid var(--light-border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2vh;
+            margin-bottom: 2vh;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 2vh 2vw;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: clamp(1.8em, 4vw, 2.5em);
+            font-weight: bold;
+            margin-bottom: 0.5vh;
+        }
+
+        .stat-label {
+            font-size: clamp(0.8em, 2vw, 1em);
+            opacity: 0.9;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2vh;
+            margin-bottom: 2vh;
+        }
+
+        .feature-card {
+            background: var(--dark-bg);
+            padding: 2vh 2vw;
+            border-radius: 15px;
+            border-left: 5px solid var(--accent-primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--dark-border);
+        }
+
+        .light-mode .feature-card {
+            background: var(--light-card);
+            border: 1px solid var(--light-border);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-color: var(--accent-primary);
+        }
+
+        .feature-icon {
+            font-size: clamp(2em, 5vw, 2.5em);
+            margin-bottom: 1.5vh;
+        }
+
+        .feature-card h3 {
+            color: var(--dark-text);
+            margin-bottom: 1vh;
+            font-size: clamp(1.1em, 3vw, 1.3em);
+        }
+
+        .light-mode .feature-card h3 {
+            color: var(--light-text);
+        }
+
+        .feature-card p {
+            color: var(--dark-text-secondary);
+            line-height: 1.5;
+            font-size: clamp(0.9em, 2.5vw, 1em);
+        }
+
+        .light-mode .feature-card p {
+            color: var(--light-text-secondary);
+        }
+
+        .products-section {
+            background: var(--dark-card);
+            border-radius: 15px;
+            padding: 2vh 2vw;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--dark-border);
+            flex: 1;
+        }
+
+        .light-mode .products-section {
+            background: var(--light-card);
+            border: 1px solid var(--light-border);
+        }
+
+        .section-header h3 {
+            color: var(--dark-text);
+            font-size: clamp(1.2em, 3vw, 1.5em);
+            font-weight: 600;
+        }
+
+        .light-mode .section-header h3 {
+            color: var(--light-text);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .products-table th {
+            background: var(--accent-primary);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            padding: 1.5vh 1vw;
+            text-align: left;
+        }
+
+        .products-table td {
+            padding: 1.5vh 1vw;
+            text-align: left;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .light-mode .products-table td {
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        .products-table tr:hover {
+            background: var(--dark-bg);
+        }
+
+        .light-mode .products-table tr:hover {
+            background: var(--light-bg);
+        }
+
+        .low-stock {
+            color: var(--danger);
+            font-weight: bold;
+            background: rgba(230, 57, 70, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .in-stock {
+            color: var(--success);
+            font-weight: bold;
+            background: rgba(76, 201, 240, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 0.5vw;
+        }
+
+        .btn-small {
+            padding: 0.5vh 1vw;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: clamp(0.7em, 2vw, 0.85em);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: var(--accent-primary);
             color: white;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+
+        .btn-edit:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
         }
-        h1 {
-            color: #4361ee;
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .quick-actions {
+            margin-top: 2vh;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 1.5vh;
+            margin: 0.8vh 0;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: clamp(0.9em, 2.5vw, 1em);
+        }
+
+        .action-btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            padding: 2.5vh 4vw;
+            background: var(--success);
+            color: white;
+            border-radius: 15px;
+            display: none;
+            z-index: 1001;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            font-weight: 600;
             text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>STOCKWISE INVENTORY MANAGEMENT</h1>
-        <p>Professional Inventory System - Loading Full Version...</p>
-        <p>If you see this, the basic deployment is working!</p>
-    </div>
-=======
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        :root {
-            --dark-bg: #1a1d29; --dark-card: #252a3a; --dark-border: #343a4a; --dark-text: #e9ecef; --dark-text-secondary: #adb5bd;
-            --accent-primary: #4361ee; --accent-secondary: #3a0ca3; --success: #4cc9f0; --warning: #f72585; --danger: #e63946;
-            --light-bg: #f8f9fa; --light-card: #ffffff; --light-border: #dee2e6; --light-text: #212529; --light-text-secondary: #6c757d;
+            min-width: 300px;
+            max-width: 500px;
+            font-size: clamp(1em, 3vw, 1.1em);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: notificationSlideIn 0.5s ease-out forwards;
+            opacity: 0;
         }
 
-        body { background: var(--dark-bg); color: var(--dark-text); min-height: 100vh; transition: all 0.3s ease; }
-        body.light-mode { background: var(--light-bg); color: var(--light-text); }
+        @keyframes notificationSlideIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
 
-        .dark-mode-toggle { position: fixed; top: 20px; right: 20px; z-index: 1002; background: var(--dark-card); border: 1px solid var(--dark-border); 
-                           padding: 10px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .notification.error {
+            background: var(--danger);
+        }
 
-        .background-logo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; 
-                          justify-content: center; z-index: 0; pointer-events: none; opacity: 0.03; }
-        .stockwise-text { font-size: 20vw; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 2vw; transform: rotate(-5deg); }
+        .notification.success {
+            background: var(--success);
+        }
 
-        .login-container { background: var(--dark-card); padding: 40px; border-radius: 25px; width: 90%; max-width: 500px; text-align: center; 
-                          position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+        .notification.warning {
+            background: var(--warning);
+        }
 
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; margin-bottom: 8px; color: var(--dark-text); font-weight: 600; }
-        .form-group input { width: 100%; padding: 15px; background: var(--dark-bg); border: 1px solid var(--dark-border); border-radius: 15px; 
-                           color: var(--dark-text); font-size: 16px; }
+        .notification.info {
+            background: var(--accent-primary);
+        }
 
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 15px; font-size: 18px; font-weight: 600; cursor: pointer; }
-        .btn-primary { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; margin-bottom: 15px; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-        .dashboard-container { display: none; width: 100%; min-height: 100vh; background: var(--dark-card); }
-        .header { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; padding: 20px; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
-        .stat-card { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; padding: 25px; 
-                    border-radius: 15px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        .stat-number { font-size: 2.5em; font-weight: bold; margin-bottom: 5px; }
-        .stat-label { font-size: 1em; opacity: 0.9; }
-
-        .notification { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 25px 40px; background: var(--success); 
-                      color: white; border-radius: 15px; display: none; z-index: 1001; font-weight: 600; text-align: center; 
-                      min-width: 300px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .notification.error { background: var(--danger); }
-        .notification.success { background: var(--success); }
-
-        .demo-accounts { margin-top: 20px; padding: 15px; background: var(--dark-bg); border-radius: 10px; border: 1px solid var(--dark-border); }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .notification {
+                min-width: 250px;
+                max-width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -89,8 +649,8 @@
     </div>
 
     <div class="login-container" id="loginContainer">
-        <h1 style="font-size: 2.5em; margin-bottom: 10px;">STOCKWISE</h1>
-        <p style="color: var(--dark-text-secondary); margin-bottom: 30px; font-size: 1.1em;">Professional Inventory Management System</p>
+        <h1>STOCKWISE</h1>
+        <p>Professional Inventory Management System</p>
         
         <form id="loginForm">
             <div class="form-group">
@@ -105,70 +665,144 @@
             
             <button type="submit" class="btn btn-primary">ACCESS SYSTEM</button>
         </form>
-
-        <div class="demo-accounts">
-            <p style="margin-bottom: 10px; font-weight: 600; color: var(--dark-text);">Demo Accounts:</p>
-            <p style="color: var(--dark-text-secondary); margin: 5px 0;"><strong>Prince (Admin):</strong> prince / Prince@2024</p>
-            <p style="color: var(--dark-text-secondary); margin: 5px 0;"><strong>Katlego (Manager):</strong> katlego / Katlego#123</p>
-            <p style="color: var(--dark-text-secondary); margin: 5px 0;"><strong>Tefo (Staff):</strong> tefo / Tefo!789</p>
-            <p style="color: var(--dark-text-secondary); margin: 5px 0;"><strong>Tshireletso (Staff):</strong> tshireletso / Tshire!789</p>
-        </div>
     </div>
 
     <div class="dashboard-container" id="dashboardContainer">
         <div class="header">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div class="header-content">
                 <div>
-                    <h1 style="font-size: 2em;">STOCKWISE DASHBOARD</h1>
+                    <h1>STOCKWISE DASHBOARD</h1>
                     <p>Professional Inventory Analytics & Management</p>
                 </div>
-                <div style="display: flex; align-items: center; gap: 20px;">
-                    <div style="text-align: right;">
-                        <div style="font-weight: 600; font-size: 1.1em;" id="userDisplayName">Loading...</div>
-                        <div style="font-size: 0.85em; opacity: 0.9;" id="userRoleDisplay">Role: Loading...</div>
+                <div class="user-info">
+                    <div class="user-details">
+                        <div class="user-name" id="userDisplayName">Loading...</div>
+                        <div class="user-role" id="userRoleDisplay">Role: Loading...</div>
                     </div>
-                    <button style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); 
-                                padding: 8px 16px; border-radius: 8px; cursor: pointer;" onclick="logout()">Logout</button>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
                 </div>
             </div>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">12</div>
-                <div class="stat-label">Total Products</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">R 45,299.85</div>
-                <div class="stat-label">Total Inventory Value</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">3</div>
-                <div class="stat-label">Low Stock Items</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">6</div>
-                <div class="stat-label">Product Categories</div>
-            </div>
-        </div>
+        <div class="content">
+            <div class="main-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProducts">12</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalValue">R 45,299.85</div>
+                        <div class="stat-label">Total Inventory Value</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="lowStock">3</div>
+                        <div class="stat-label">Low Stock Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCategories">6</div>
+                        <div class="stat-label">Product Categories</div>
+                    </div>
+                </div>
 
-        <div style="padding: 30px; text-align: center;">
-            <h2 style="font-size: 2em; margin-bottom: 15px; color: var(--dark-text);">🎉 STOCKWISE Successfully Deployed!</h2>
-            <p style="font-size: 1.2em; color: var(--dark-text-secondary); margin-bottom: 20px;">
-                Your professional inventory management system is now ready to use.
-            </p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 30px;">
-                <div style="background: var(--dark-bg); padding: 20px; border-radius: 10px; border-left: 4px solid var(--accent-primary);">
-                    <h3 style="color: var(--dark-text); margin-bottom: 10px;">📊 Analytics</h3>
-                    <p style="color: var(--dark-text-secondary);">Real-time inventory insights and reporting</p>
+                <div class="features-grid">
+                    <div class="feature-card" onclick="showNotification('View All Products feature would open here', 'info')">
+                        <div class="feature-icon">📋</div>
+                        <h3>View All Products</h3>
+                        <p>Browse complete inventory with advanced search and filtering capabilities</p>
+                    </div>
+
+                    <div class="feature-card" onclick="showNotification('Add New Product feature would open here', 'info')">
+                        <div class="feature-icon">➕</div>
+                        <h3>Add New Product</h3>
+                        <p>Add new items to inventory with comprehensive product details</p>
+                    </div>
+
+                    <div class="feature-card" onclick="showNotification('Edit Products feature would open here', 'info')">
+                        <div class="feature-icon">✏️</div>
+                        <h3>Edit Products</h3>
+                        <p>Modify product information, pricing, and stock levels</p>
+                    </div>
+
+                    <div class="feature-card" onclick="showNotification('Generate Reports feature would open here', 'info')">
+                        <div class="feature-icon">📊</div>
+                        <h3>Generate Reports</h3>
+                        <p>Create detailed inventory and performance analytics reports</p>
+                    </div>
                 </div>
-                <div style="background: var(--dark-bg); padding: 20px; border-radius: 10px; border-left: 4px solid var(--success);">
-                    <h3 style="color: var(--dark-text); margin-bottom: 10px;">📦 Management</h3>
-                    <p style="color: var(--dark-text-secondary);">Complete product and stock control</p>
+
+                <div class="products-section">
+                    <div class="section-header">
+                        <h3>Current Inventory Overview</h3>
+                    </div>
+                    <div class="table-container">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price (ZAR)</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Laptop Dell XPS 15</td>
+                                    <td>Electronics</td>
+                                    <td>R 25,999.99</td>
+                                    <td>8</td>
+                                    <td><span class="low-stock">Low Stock</span></td>
+                                    <td class="action-cell">
+                                        <button class="btn-small btn-edit" onclick="showNotification('Edit product: Laptop Dell XPS 15', 'info')">Edit</button>
+                                        <button class="btn-small btn-delete" onclick="showNotification('Delete product: Laptop Dell XPS 15', 'warning')">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Wireless Mouse</td>
+                                    <td>Electronics</td>
+                                    <td>R 499.99</td>
+                                    <td>45</td>
+                                    <td><span class="in-stock">In Stock</span></td>
+                                    <td class="action-cell">
+                                        <button class="btn-small btn-edit" onclick="showNotification('Edit product: Wireless Mouse', 'info')">Edit</button>
+                                        <button class="btn-small btn-delete" onclick="showNotification('Delete product: Wireless Mouse', 'warning')">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Office Chair Executive</td>
+                                    <td>Office</td>
+                                    <td>R 3,499.99</td>
+                                    <td>12</td>
+                                    <td><span class="in-stock">In Stock</span></td>
+                                    <td class="action-cell">
+                                        <button class="btn-small btn-edit" onclick="showNotification('Edit product: Office Chair', 'info')">Edit</button>
+                                        <button class="btn-small btn-delete" onclick="showNotification('Delete product: Office Chair', 'warning')">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div style="background: var(--dark-bg); padding: 20px; border-radius: 10px; border-left: 4px solid var(--warning);">
-                    <h3 style="color: var(--dark-text); margin-bottom: 10px;">👥 Multi-Role</h3>
-                    <p style="color: var(--dark-text-secondary);">Admin, Manager, and Staff access levels</p>
+            </div>
+
+            <div class="sidebar">
+                <h3>Quick Actions</h3>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="showNotification('Add New Product action', 'info')">➕ Add New Product</button>
+                    <button class="action-btn" onclick="showNotification('View Inventory action', 'info')">📋 View Inventory</button>
+                    <button class="action-btn" onclick="showNotification('Low Stock Alert action', 'warning')">⚠️ Low Stock Alert</button>
+                    <button class="action-btn" onclick="showNotification('Stock Report action', 'info')">📊 Stock Report</button>
+                    <button class="action-btn" onclick="showNotification('Export Data action', 'info')">📤 Export Data</button>
+                    <button class="action-btn" onclick="showNotification('Refresh Data action', 'info')">🔄 Refresh Data</button>
+                </div>
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--dark-border);">
+                    <h3>System Information</h3>
+                    <p style="margin: 10px 0; color: var(--dark-text-secondary);"><strong>Version:</strong> v2.1.0</p>
+                    <p style="margin: 10px 0; color: var(--dark-text-secondary);"><strong>Last Updated:</strong> Just now</p>
+                    <p style="margin: 10px 0; color: var(--dark-text-secondary);"><strong>Data Points:</strong> 12 records</p>
                 </div>
             </div>
         </div>
@@ -177,6 +811,7 @@
     <div id="notification" class="notification"></div>
 
     <script>
+        // System Configuration
         const DEMO_ACCOUNTS = {
             'prince': { password: 'Prince@2024', role: 'admin', name: 'Prince Sithoza' },
             'katlego': { password: 'Katlego#123', role: 'manager', name: 'Katlego Tawana' },
@@ -186,50 +821,86 @@
 
         let currentUser = null;
 
+        // Theme Toggle Function
         function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
-            if (document.body.classList.contains('light-mode')) {
-                themeIcon.textContent = '☀️';
-                themeText.textContent = 'Light Mode';
+            const body = document.body;
+            body.classList.toggle('light-mode');
+            
+            if (body.classList.contains('light-mode')) {
+                localStorage.setItem('stockwise-theme', 'light');
+                updateThemeToggle('light');
                 showNotification('Light mode activated', 'info');
             } else {
-                themeIcon.textContent = '🌙';
-                themeText.textContent = 'Dark Mode';
+                localStorage.setItem('stockwise-theme', 'dark');
+                updateThemeToggle('dark');
                 showNotification('Dark mode activated', 'info');
             }
         }
 
+        function updateThemeToggle(theme) {
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (theme === 'light') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+        }
+
+        // Notification System
         function showNotification(message, type = 'info', duration = 3000) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.className = 'notification ' + type;
             notification.style.display = 'block';
+            
+            // Reset animation
+            notification.style.animation = 'none';
+            setTimeout(() => {
+                notification.style.animation = 'notificationSlideIn 0.5s ease-out forwards';
+            }, 10);
+            
             setTimeout(() => {
                 notification.style.display = 'none';
             }, duration);
         }
 
+        // Login Handler
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
+            
             const username = document.getElementById('username').value.toLowerCase();
             const password = document.getElementById('password').value;
-
+            
             if (DEMO_ACCOUNTS[username] && DEMO_ACCOUNTS[username].password === password) {
-                currentUser = { username: username, ...DEMO_ACCOUNTS[username] };
-                showNotification('Login successful! Welcome ' + currentUser.name, 'success');
+                currentUser = {
+                    username: username,
+                    ...DEMO_ACCOUNTS[username]
+                };
+                
+                showNotification(`Welcome back, ${currentUser.name}!`, 'success');
                 setTimeout(() => {
-                    document.getElementById('loginContainer').style.display = 'none';
-                    document.getElementById('dashboardContainer').style.display = 'block';
-                    document.getElementById('userDisplayName').textContent = currentUser.name;
-                    document.getElementById('userRoleDisplay').textContent = 'Role: ' + currentUser.role.toUpperCase();
+                    showDashboard();
                 }, 1000);
             } else {
                 showNotification('Invalid username or password!', 'error');
             }
         });
 
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            
+            // Update user info
+            document.getElementById('userDisplayName').textContent = currentUser.name;
+            document.getElementById('userRoleDisplay').textContent = `Role: ${currentUser.role.toUpperCase()}`;
+        }
+
+        // Logout Function
         function logout() {
             currentUser = null;
             document.getElementById('dashboardContainer').style.display = 'none';
@@ -238,16 +909,14 @@
             showNotification('Logged out successfully!', 'info');
         }
 
-        // Initialize theme
+        // Initialize theme from localStorage
         document.addEventListener('DOMContentLoaded', function() {
             const savedTheme = localStorage.getItem('stockwise-theme');
             if (savedTheme === 'light') {
                 document.body.classList.add('light-mode');
-                document.getElementById('themeIcon').textContent = '☀️';
-                document.getElementById('themeText').textContent = 'Light Mode';
+                updateThemeToggle('light');
             }
         });
     </script>
->>>>>>> 5a255d1a33a674a42e897d5e74b66b3e35c5b9df
 </body>
 </html>
