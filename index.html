@@ -6,6 +6,7 @@
     <title>STOCKWISE - Professional Inventory Management</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+<<<<<<< HEAD
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -29,5 +30,224 @@
         <p>Professional Inventory System - Loading Full Version...</p>
         <p>If you see this, the basic deployment is working!</p>
     </div>
+=======
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        :root {
+            --dark-bg: #1a1d29; --dark-card: #252a3a; --dark-border: #343a4a; --dark-text: #e9ecef; --dark-text-secondary: #adb5bd;
+            --accent-primary: #4361ee; --accent-secondary: #3a0ca3; --success: #4cc9f0; --warning: #f72585; --danger: #e63946;
+            --light-bg: #f8f9fa; --light-card: #ffffff; --light-border: #dee2e6; --light-text: #212529; --light-text-secondary: #6c757d;
+        }
+
+        body { background: var(--dark-bg); color: var(--dark-text); min-height: 100vh; transition: all 0.3s ease; }
+        body.light-mode { background: var(--light-bg); color: var(--light-text); }
+
+        .dark-mode-toggle { position: fixed; top: 20px; right: 20px; z-index: 1002; background: var(--dark-card); border: 1px solid var(--dark-border); 
+                           padding: 10px 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+
+        .background-logo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; 
+                          justify-content: center; z-index: 0; pointer-events: none; opacity: 0.03; }
+        .stockwise-text { font-size: 20vw; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 2vw; transform: rotate(-5deg); }
+
+        .login-container { background: var(--dark-card); padding: 40px; border-radius: 25px; width: 90%; max-width: 500px; text-align: center; 
+                          position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--dark-text); font-weight: 600; }
+        .form-group input { width: 100%; padding: 15px; background: var(--dark-bg); border: 1px solid var(--dark-border); border-radius: 15px; 
+                           color: var(--dark-text); font-size: 16px; }
+
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 15px; font-size: 18px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; margin-bottom: 15px; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+
+        .dashboard-container { display: none; width: 100%; min-height: 100vh; background: var(--dark-card); }
+        .header { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; padding: 20px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+        .stat-card { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; padding: 25px; 
+                    border-radius: 15px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .stat-number { font-size: 2.5em; font-weight: bold; margin-bottom: 5px; }
+        .stat-label { font-size: 1em; opacity: 0.9; }
+
+        .notification { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 25px 40px; background: var(--success); 
+                      color: white; border-radius: 15px; display: none; z-index: 1001; font-weight: 600; text-align: center; 
+                      min-width: 300px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .notification.error { background: var(--danger); }
+        .notification.success { background: var(--success); }
+
+        .demo-accounts { margin-top: 20px; padding: 15px; background: var(--dark-bg); border-radius: 10px; border: 1px solid var(--dark-border); }
+    </style>
+</head>
+<body>
+    <button class="dark-mode-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+    </button>
+
+    <div class="background-logo">
+        <div class="stockwise-text">STOCKWISE</div>
+    </div>
+
+    <div class="login-container" id="loginContainer">
+        <h1 style="font-size: 2.5em; margin-bottom: 10px;">STOCKWISE</h1>
+        <p style="color: var(--dark-text-secondary); margin-bottom: 30px; font-size: 1.1em;">Professional Inventory Management System</p>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">ACCESS SYSTEM</button>
+        </form>
+
+        <div class="demo-accounts">
+            <p style="margin-bottom: 10px; font-weight: 600; color: var(--dark-text);">Demo Accounts:</p>
+            <p style="color: var(--dark-text-secondary); margin: 5px 0;"><strong>Prince (Admin):</strong> prince / Prince@2024</p>
+            <p style="color: var(--dark-text-secondary); margin: 5px 0;"><strong>Katlego (Manager):</strong> katlego / Katlego#123</p>
+            <p style="color: var(--dark-text-secondary); margin: 5px 0;"><strong>Tefo (Staff):</strong> tefo / Tefo!789</p>
+            <p style="color: var(--dark-text-secondary); margin: 5px 0;"><strong>Tshireletso (Staff):</strong> tshireletso / Tshire!789</p>
+        </div>
+    </div>
+
+    <div class="dashboard-container" id="dashboardContainer">
+        <div class="header">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <h1 style="font-size: 2em;">STOCKWISE DASHBOARD</h1>
+                    <p>Professional Inventory Analytics & Management</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="text-align: right;">
+                        <div style="font-weight: 600; font-size: 1.1em;" id="userDisplayName">Loading...</div>
+                        <div style="font-size: 0.85em; opacity: 0.9;" id="userRoleDisplay">Role: Loading...</div>
+                    </div>
+                    <button style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); 
+                                padding: 8px 16px; border-radius: 8px; cursor: pointer;" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">R 45,299.85</div>
+                <div class="stat-label">Total Inventory Value</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Low Stock Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Product Categories</div>
+            </div>
+        </div>
+
+        <div style="padding: 30px; text-align: center;">
+            <h2 style="font-size: 2em; margin-bottom: 15px; color: var(--dark-text);">🎉 STOCKWISE Successfully Deployed!</h2>
+            <p style="font-size: 1.2em; color: var(--dark-text-secondary); margin-bottom: 20px;">
+                Your professional inventory management system is now ready to use.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 30px;">
+                <div style="background: var(--dark-bg); padding: 20px; border-radius: 10px; border-left: 4px solid var(--accent-primary);">
+                    <h3 style="color: var(--dark-text); margin-bottom: 10px;">📊 Analytics</h3>
+                    <p style="color: var(--dark-text-secondary);">Real-time inventory insights and reporting</p>
+                </div>
+                <div style="background: var(--dark-bg); padding: 20px; border-radius: 10px; border-left: 4px solid var(--success);">
+                    <h3 style="color: var(--dark-text); margin-bottom: 10px;">📦 Management</h3>
+                    <p style="color: var(--dark-text-secondary);">Complete product and stock control</p>
+                </div>
+                <div style="background: var(--dark-bg); padding: 20px; border-radius: 10px; border-left: 4px solid var(--warning);">
+                    <h3 style="color: var(--dark-text); margin-bottom: 10px;">👥 Multi-Role</h3>
+                    <p style="color: var(--dark-text-secondary);">Admin, Manager, and Staff access levels</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        const DEMO_ACCOUNTS = {
+            'prince': { password: 'Prince@2024', role: 'admin', name: 'Prince Sithoza' },
+            'katlego': { password: 'Katlego#123', role: 'manager', name: 'Katlego Tawana' },
+            'tefo': { password: 'Tefo!789', role: 'staff', name: 'Tefo Magwatane' },
+            'tshireletso': { password: 'Tshire!789', role: 'staff', name: 'Tshireletso Dira' }
+        };
+
+        let currentUser = null;
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+                showNotification('Light mode activated', 'info');
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+                showNotification('Dark mode activated', 'info');
+            }
+        }
+
+        function showNotification(message, type = 'info', duration = 3000) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, duration);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.toLowerCase();
+            const password = document.getElementById('password').value;
+
+            if (DEMO_ACCOUNTS[username] && DEMO_ACCOUNTS[username].password === password) {
+                currentUser = { username: username, ...DEMO_ACCOUNTS[username] };
+                showNotification('Login successful! Welcome ' + currentUser.name, 'success');
+                setTimeout(() => {
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('dashboardContainer').style.display = 'block';
+                    document.getElementById('userDisplayName').textContent = currentUser.name;
+                    document.getElementById('userRoleDisplay').textContent = 'Role: ' + currentUser.role.toUpperCase();
+                }, 1000);
+            } else {
+                showNotification('Invalid username or password!', 'error');
+            }
+        });
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('dashboardContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('loginForm').reset();
+            showNotification('Logged out successfully!', 'info');
+        }
+
+        // Initialize theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('stockwise-theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeIcon').textContent = '☀️';
+                document.getElementById('themeText').textContent = 'Light Mode';
+            }
+        });
+    </script>
+>>>>>>> 5a255d1a33a674a42e897d5e74b66b3e35c5b9df
 </body>
 </html>
