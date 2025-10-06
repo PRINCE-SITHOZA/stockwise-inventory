@@ -1,79 +1,186 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>STOCKWISE - Inventory Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOCKWISE - Professional Inventory Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 40px; 
-            background: #1a1d29; 
-            color: white; 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+        :root {
+            --dark-bg: #1a1d29; --dark-card: #252a3a; --dark-border: #343a4a; --dark-text: #e9ecef; --dark-text-secondary: #adb5bd;
+            --accent-primary: #4361ee; --accent-secondary: #3a0ca3; --success: #4cc9f0; --warning: #f72585; --danger: #e63946;
+            --light-bg: #f8f9fa; --light-card: #ffffff; --light-border: #dee2e6; --light-text: #212529; --light-text-secondary: #6c757d;
         }
-        .container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-        }
-        h1 { 
-            color: #4361ee; 
-            text-align: center; 
-        }
-        .login-box { 
-            background: #252a3a; 
-            padding: 40px; 
-            border-radius: 15px; 
-            max-width: 400px; 
-            margin: 100px auto; 
-        }
-        input { 
-            width: 100%; 
-            padding: 15px; 
-            margin: 10px 0; 
-            border-radius: 8px; 
-            border: 1px solid #343a4a; 
-            background: #1a1d29; 
-            color: white; 
-        }
-        button { 
-            width: 100%; 
-            padding: 15px; 
-            background: #4361ee; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-        }
+        body { background: var(--dark-bg); color: var(--dark-text); min-height: 100vh; padding: 20px; transition: all 0.3s ease; }
+        body.light-mode { background: var(--light-bg); color: var(--light-text); }
+        .theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--accent-primary); color: white; border: none; padding: 12px 16px; border-radius: 50px; cursor: pointer; z-index: 1002; }
+        .background-logo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 0; pointer-events: none; opacity: 0.03; }
+        .stockwise-text { font-size: 280px; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 20px; transform: rotate(-5deg); user-select: none; }
+        .login-container { background: var(--dark-card); border: 1px solid var(--dark-border); padding: 50px 40px; border-radius: 25px; width: 100%; max-width: 500px; text-align: center; margin: 0 auto; }
+        .login-container h1 { color: var(--dark-text); margin-bottom: 15px; font-size: 2.8em; font-weight: 700; }
+        .form-group { margin-bottom: 25px; text-align: left; }
+        .form-group input { width: 100%; padding: 16px 20px; background: var(--dark-bg); border: 1px solid var(--dark-border); border-radius: 15px; font-size: 1.1em; color: var(--dark-text); }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; font-size: 1.2em; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; }
+        .dashboard-container { display: none; width: 100%; max-width: 1600px; background: var(--dark-card); border-radius: 20px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; padding: 25px 35px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-bottom: 25px; }
+        .stat-card { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; padding: 25px; border-radius: 15px; text-align: center; }
+        .stat-number { font-size: 2.5em; font-weight: bold; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 25px; }
+        .feature-card { background: var(--dark-bg); padding: 25px; border-radius: 15px; cursor: pointer; border: 1px solid var(--dark-border); }
+        .products-section { background: white; border-radius: 15px; padding: 25px; }
+        .products-table { width: 100%; border-collapse: collapse; }
+        .products-table th { background: #34495e; color: white; padding: 18px; }
+        .products-table td { padding: 18px; border-bottom: 1px solid #ecf0f1; color: #2c3e50; }
+        .low-stock { color: #e74c3c; font-weight: bold; background: rgba(231, 76, 60, 0.1); padding: 4px 8px; border-radius: 4px; }
+        .in-stock { color: #27ae60; font-weight: bold; background: rgba(39, 174, 96, 0.1); padding: 4px 8px; border-radius: 4px; }
+        .notification { position: fixed; top: 25px; right: 25px; padding: 18px 28px; background: #27ae60; color: white; border-radius: 10px; display: none; z-index: 1001; }
+        .error { background: #e74c3c; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-box">
-            <h1>STOCKWISE</h1>
-            <p>Professional Inventory Management</p>
-            <input type="text" placeholder="Username" id="username">
-            <input type="password" placeholder="Password" id="password">
-            <button onclick="login()">ACCESS SYSTEM</button>
-            <p style="margin-top: 20px; font-size: 12px; color: #adb5bd;">
-                Try: prince / Prince@2024
-            </p>
+    <button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span></button>
+    <div class="background-logo"><div class="stockwise-text">STOCKWISE</div></div>
+
+    <div class="login-container" id="loginContainer">
+        <h1>STOCKWISE</h1>
+        <p>Professional Inventory Management System</p>
+        <form id="loginForm">
+            <div class="form-group"><label>Username</label><input type="text" id="username" placeholder="Enter username" required></div>
+            <div class="form-group"><label>Password</label><input type="password" id="password" placeholder="Enter password" required></div>
+            <button type="submit" class="btn btn-primary">ACCESS SYSTEM</button>
+        </form>
+        <div style="margin-top: 20px; font-size: 0.9em; color: var(--dark-text-secondary);">
+            <strong>Demo Accounts:</strong><br>
+            Admin: prince / Prince@2024<br>
+            Manager: katlego / Katlego#123<br>
+            Staff: tshireletso / Tshire!789
         </div>
     </div>
+
+    <div class="dashboard-container" id="dashboardContainer">
+        <div class="header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div><h1>STOCKWISE DASHBOARD</h1><p>Professional Inventory Analytics & Management</p></div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="text-align: right;"><div id="userDisplayName" style="font-weight: 600;">User</div><div id="userRoleDisplay" style="font-size: 0.85em;">Role</div></div>
+                    <button onclick="logout()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 10px 20px; border-radius: 8px; cursor: pointer;">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 35px;">
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-number" id="totalProducts">10,000</div><div class="stat-label">Total Products</div></div>
+                <div class="stat-card"><div class="stat-number" id="totalValue">R 15.2M</div><div class="stat-label">Inventory Value</div></div>
+                <div class="stat-card"><div class="stat-number" id="lowStock">487</div><div class="stat-label">Low Stock Items</div></div>
+                <div class="stat-card"><div class="stat-number" id="totalCategories">10</div><div class="stat-label">Categories</div></div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card" onclick="showNotification('Viewing all 10,000 products')">
+                    <div style="font-size: 1.8em; margin-bottom: 15px; color: var(--accent-primary);">📦</div>
+                    <h3>View Inventory</h3>
+                    <p>Browse complete inventory with advanced search and filtering capabilities</p>
+                </div>
+                <div class="feature-card" onclick="showNotification('Add product modal opened')">
+                    <div style="font-size: 1.8em; margin-bottom: 15px; color: var(--accent-primary);">➕</div>
+                    <h3>Add Product</h3>
+                    <p>Add new items to inventory with comprehensive product details</p>
+                </div>
+                <div class="feature-card" onclick="showNotification('Generating inventory reports...')">
+                    <div style="font-size: 1.8em; margin-bottom: 15px; color: var(--accent-primary);">📊</div>
+                    <h3>Analytics</h3>
+                    <p>Create detailed inventory and performance analytics reports</p>
+                </div>
+                <div class="feature-card" onclick="showNotification('Exporting data to CSV...')">
+                    <div style="font-size: 1.8em; margin-bottom: 15px; color: var(--accent-primary);">📤</div>
+                    <h3>Export Data</h3>
+                    <p>Export inventory data to CSV, Excel formats for external analysis</p>
+                </div>
+            </div>
+
+            <div class="products-section">
+                <h3 style="color: #2c3e50; margin-bottom: 20px;">Current Inventory Overview</h3>
+                <div style="overflow-x: auto;">
+                    <table class="products-table">
+                        <thead>
+                            <tr><th>Product Name</th><th>SKU</th><th>Category</th><th>Price (ZAR)</th><th>Quantity</th><th>Supplier</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Smartphone X Pro</td><td>SKU-ELC-000001</td><td>Electronics</td><td>R 12,499.99</td><td>45</td><td>MTN Group</td><td><span class="in-stock">In Stock</span></td></tr>
+                            <tr><td>Wireless Headphones</td><td>SKU-ELC-000002</td><td>Electronics</td><td>R 1,299.99</td><td>3</td><td>Tech Distributors</td><td><span class="low-stock">Low Stock</span></td></tr>
+                            <tr><td>Office Chair Pro</td><td>SKU-OFF-000015</td><td>Office</td><td>R 2,499.00</td><td>28</td><td>Bidvest Group</td><td><span class="in-stock">In Stock</span></td></tr>
+                            <tr><td>Energy Drink (24pk)</td><td>SKU-FOD-000342</td><td>Food</td><td>R 349.99</td><td>156</td><td>Shoprite Holdings</td><td><span class="in-stock">In Stock</span></td></tr>
+                            <tr><td>Car Battery</td><td>SKU-AUT-000087</td><td>Automotive</td><td>R 1,899.00</td><td>2</td><td>AutoZone SA</td><td><span class="low-stock">Low Stock</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
     <script>
-        function login() {
-            const users = {
-                'prince': 'Prince@2024',
-                'katlego': 'Katlego#123',
-                'tshireletso': 'Tshire!789'
-            };
+        const users = {
+            'prince': { password: 'Prince@2024', name: 'Prince', role: 'Administrator' },
+            'katlego': { password: 'Katlego#123', name: 'Katlego', role: 'Manager' },
+            'tshireletso': { password: 'Tshire!789', name: 'Tshireletso', role: 'Staff' },
+            'tefo': { password: 'Tefo$456', name: 'Tefo', role: 'Staff' }
+        };
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            document.getElementById('themeIcon').textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+            document.getElementById('themeText').textContent = document.body.classList.contains('light-mode') ? 'Light Mode' : 'Dark Mode';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            if (users[username] === password) {
-                alert('Welcome ' + username + '! Full system would load here.');
-                document.body.innerHTML = '<div class="container"><h1>STOCKWISE DASHBOARD</h1><p>10,000 Products Loaded</p><p>Full inventory system active</p></div>';
+            if (users[username] && users[username].password === password) {
+                showDashboard(users[username]);
+                showNotification('Welcome ' + users[username].name + ' to STOCKWISE!');
             } else {
-                alert('Invalid login!');
+                showNotification('Invalid credentials! Please try again.', true);
             }
+        });
+
+        function showDashboard(user) {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboardContainer').style.display = 'block';
+            document.getElementById('userDisplayName').textContent = user.name;
+            document.getElementById('userRoleDisplay').textContent = 'Role: ' + user.role;
         }
+
+        function logout() {
+            document.getElementById('dashboardContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('loginForm').reset();
+            showNotification('Logged out successfully');
+        }
+
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            if (isError) notification.classList.add('error');
+            else notification.classList.remove('error');
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 4000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification('STOCKWISE Inventory System Loaded');
+        });
     </script>
 </body>
 </html>
